@@ -78,7 +78,7 @@ commands:
             - ios/Pods
 
 jobs:
-  checkout-and-cache:
+  checkout_and_cache:
     docker:
       - image: cimg/base:2021.01 
     steps:
@@ -169,10 +169,10 @@ jobs:
 workflows:
   test_and_distribute:
     jobs:
-      - checkout-and-cache
+      - checkout_and_cache
       - unit_test:
           requires: 
-            - checkout-and-cache
+            - checkout_and_cache
       - integration_test_ios:
           requires: 
             - unit_test
