@@ -94,7 +94,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            flutter/bin/flutter pub global activate junitreport
+            flutter pub global activate junitreport
             export PATH="$PATH":"$HOME/.pub-cache/bin"
             flutter test --machine | tojunit --output ./unit_test_results.json
       - store_test_results:
