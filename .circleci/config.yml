@@ -12,6 +12,11 @@ executors:
       - image: cirrusci/flutter:2.2.2
     resource_class: xlarge
 
+#YAML anchors
+reattach_workspace: &reattach
+  attach_workspace:
+    at: .
+
 commands:
   install_flutter_macos:
     steps:
@@ -73,10 +78,19 @@ commands:
             - ios/Pods
 
 jobs:
+  checkout-and-cache:
+    docker:
+      - image: cimg/base:2021.01 
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   unit_test:
     executor: flutter
     steps:
-      - checkout
+      - *reattach
       - run:
           name: Run tests
           command: flutter test
@@ -86,7 +100,7 @@ jobs:
       name: android/android-machine
       resource-class: xlarge
     steps:
-      - checkout
+      - *reattach
       - run:
           name: Create AVD
           command: |
@@ -119,7 +133,7 @@ jobs:
       name: android/android-machine
       resource-class: xlarge
     steps:
-      - checkout
+      - *reattach
       - install_flutter_linux
       - install_android_gradle
       - install_android_gems
@@ -130,7 +144,7 @@ jobs:
   integration_test_ios:
     executor: mac
     steps:
-      - checkout
+      - *reattach
       - install_flutter_macos
       - install_ios_pod
       - run:
@@ -154,8 +168,19 @@ jobs:
 workflows:
   test_and_distribute:
     jobs:
-      - unit_test
-      - integration_test_ios
-      - distribute_ios
-      - integration_test_android
-      - distribute_android
+      - checkout-and-cache
+      - unit_test:
+          requires: 
+            - checkout-and-cache
+      - integration_test_ios:
+          requires: 
+            - unit_test
+      - distribute_ios:
+          requires: 
+            - integration_test_ios
+      - integration_test_android:
+          requires: 
+            - unit_test
+      - distribute_android:
+          requires: 
+            - integration_test_android
