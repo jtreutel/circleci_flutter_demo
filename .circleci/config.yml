@@ -95,7 +95,7 @@ jobs:
           name: Install junitreport
           command: |
             flutter pub global activate junitreport
-            export PATH="$PATH":"$HOME/.pub-cache/bin"
+            echo 'export PATH="$PATH":"$HOME/.pub-cache/bin"' >> $BASH_ENV
       - run:
           name: Run tests
           command: flutter test --machine | tojunit --output ./unit_test_results.json
