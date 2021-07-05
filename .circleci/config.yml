@@ -25,6 +25,7 @@ commands:
           unzip flutter_sdk.zip
           echo 'export FLUTTER_HOME=~/project/flutter' >> $BASH_ENV && source $BASH_ENV
           $FLUTTER_HOME/bin/flutter pub get
+          $FLUTTER_HOME/bin/flutter pub global activate junitreport
   install_flutter_linux:
     steps:
       - run: |
@@ -32,6 +33,7 @@ commands:
           tar xf flutter_sdk.tar.xz
           echo 'export FLUTTER_HOME=~/project/flutter' >> $BASH_ENV && source $BASH_ENV
           $FLUTTER_HOME/bin/flutter pub get
+          $FLUTTER_HOME/bin/flutter pub global activate junitreport
   install_android_gems:
     steps:
       - restore_cache:
@@ -93,7 +95,7 @@ jobs:
       - *reattach
       - run:
           name: Run tests
-          command: flutter test --machine > unit_test_results.json
+          command: flutter test --machine | tojunit --output ./unit_test_results.json
       - store_test_results:
           path: ./unit_test_results.json
   integration_test_android:
@@ -128,7 +130,6 @@ jobs:
       - run:
           name: Integration Test
           command: $FLUTTER_HOME/bin/flutter drive --driver=test_driver/integration_test_driver.dart --target=integration_test/counter_test.dart
-
   distribute_android:
     executor:
       name: android/android-machine
