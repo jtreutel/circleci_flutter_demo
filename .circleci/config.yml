@@ -92,11 +92,13 @@ jobs:
     steps:
       - *reattach
       - run:
-          name: Run tests
+          name: Install junitreport
           command: |
             flutter pub global activate junitreport
             export PATH="$PATH":"$HOME/.pub-cache/bin"
-            flutter test --machine | tojunit --output ./unit_test_results.json
+      - run:
+          name: Run tests
+          command: flutter test --machine | tojunit --output ./unit_test_results.json
       - store_test_results:
           path: ./unit_test_results.json
   integration_test_android:
