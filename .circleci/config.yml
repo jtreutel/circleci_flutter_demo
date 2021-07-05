@@ -130,6 +130,7 @@ jobs:
       - run:
           name: Integration Test
           command: $FLUTTER_HOME/bin/flutter drive --driver=test_driver/integration_test_driver.dart --target=integration_test/counter_test.dart
+          #lots of discussion on GH about adding CI-readable test output, but so far nothing has been implemented: https://github.com/flutter/flutter/issues/51135
   distribute_android:
     executor:
       name: android/android-machine
