@@ -24,9 +24,7 @@ commands:
           if ! test -f "flutter_sdk.zip"; then curl -o flutter_sdk.zip https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_2.2.2-stable.zip; fi
           unzip flutter_sdk.zip
           echo 'export FLUTTER_HOME=~/project/flutter' >> $BASH_ENV && source $BASH_ENV
-          $FLUTTER_HOME/bin/flutter pub get
-          $FLUTTER_HOME/bin/flutter pub global activate junitreport
-          export PATH="$PATH":"$HOME/.pub-cache/bin"
+          $FLUTTER_HOME/bin/flutter pub get 
   install_flutter_linux:
     steps:
       - run: |
@@ -34,8 +32,6 @@ commands:
           tar xf flutter_sdk.tar.xz
           echo 'export FLUTTER_HOME=~/project/flutter' >> $BASH_ENV && source $BASH_ENV
           $FLUTTER_HOME/bin/flutter pub get
-          $FLUTTER_HOME/bin/flutter pub global activate junitreport
-          export PATH="$PATH":"$HOME/.pub-cache/bin"
   install_android_gems:
     steps:
       - restore_cache:
@@ -97,7 +93,10 @@ jobs:
       - *reattach
       - run:
           name: Run tests
-          command: flutter test --machine | tojunit --output ./unit_test_results.json
+          command: |
+            flutter/bin/flutter pub global activate junitreport
+            export PATH="$PATH":"$HOME/.pub-cache/bin"
+            flutter test --machine | tojunit --output ./unit_test_results.json
       - store_test_results:
           path: ./unit_test_results.json
   integration_test_android:
