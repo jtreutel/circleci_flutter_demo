@@ -26,6 +26,7 @@ commands:
           echo 'export FLUTTER_HOME=~/project/flutter' >> $BASH_ENV && source $BASH_ENV
           $FLUTTER_HOME/bin/flutter pub get
           $FLUTTER_HOME/bin/flutter pub global activate junitreport
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
   install_flutter_linux:
     steps:
       - run: |
@@ -34,6 +35,7 @@ commands:
           echo 'export FLUTTER_HOME=~/project/flutter' >> $BASH_ENV && source $BASH_ENV
           $FLUTTER_HOME/bin/flutter pub get
           $FLUTTER_HOME/bin/flutter pub global activate junitreport
+          export PATH="$PATH":"$HOME/.pub-cache/bin"
   install_android_gems:
     steps:
       - restore_cache:
