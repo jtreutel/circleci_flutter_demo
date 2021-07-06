@@ -99,6 +99,8 @@ jobs:
       - run:
           name: Run tests
           command: flutter test --machine | tojunit --output ./unit_test_results.xml
+      - store_artifacts:
+          path: ./unit_test_results.xml
       - store_test_results:
           path: ./unit_test_results.xml
   integration_test_android:
