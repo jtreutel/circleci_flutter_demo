@@ -98,9 +98,9 @@ jobs:
             echo 'export PATH="$PATH":"$HOME/.pub-cache/bin"' >> $BASH_ENV
       - run:
           name: Run tests
-          command: flutter test --machine | tojunit --output ./unit_test_results.json
+          command: flutter test --machine | tojunit --output ./unit_test_results.xml
       - store_test_results:
-          path: ./project/unit_test_results.json
+          path: ./unit_test_results.xml
   integration_test_android:
     executor:
       name: android/android-machine
