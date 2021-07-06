@@ -100,7 +100,7 @@ jobs:
           name: Run tests
           command: flutter test --machine | tojunit --output ./unit_test_results.json
       - store_test_results:
-          path: ./unit_test_results.json
+          path: ./project/unit_test_results.json
   integration_test_android:
     executor:
       name: android/android-machine
